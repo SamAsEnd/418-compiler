@@ -1,27 +1,13 @@
-# comment
 
-var xx = -1
-var xx = -1 + 5
-var xx = -1 + 5
-var xx=123423
-var x = 1
 var x
+var y
 
+write "Enter the first number: "
 read x
 
-var y = x / 2
-var z = x + 1
-z = x / 2
+write "Enter the second number: "
+read y
 
-if x ~ y do
-    write "Even"
-elif x ~ y do
-    write "Other"
-else do
-    write "Odd"
-end
+var z = x + y
 
-while x > 0 do
-    write x
-    x = x - 1
-end
+write z

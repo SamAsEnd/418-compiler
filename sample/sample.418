@@ -1,0 +1,27 @@
+# comment
+
+var xx = -1
+var xx = -1 + 5
+var xx = -1 + 5
+var xx=123423
+var x = 1
+var x
+
+read x
+
+var y = x / 2
+var z = x + 1
+z = x / 2
+
+if xx ~ yx do
+    write "Even"
+elif wx ~ yx do
+    write "Other"
+else do
+    write "Odd"
+end
+
+while xd > 0 do
+    write xr
+    xx = xx - 1
+end
