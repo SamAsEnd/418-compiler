@@ -1,6 +1,6 @@
 import re
+from pprint import pprint
 
-# keywords
 KEYWORD_VAR = '(?:var)'
 KEYWORD_IF = '(?:if)'
 KEYWORD_ELIF = '(?:elif)'
@@ -11,58 +11,52 @@ KEYWORD_ELSE = '(?:else)'
 KEYWORD_WRITE = '(?:write)'
 KEYWORD_READ = '(?:read)'
 
-# operators
-OP_ASSIGNMENT = '='
-
-OP_GREATER_THAN = '(>)'
-OP_LESS_THAN = '(<)'
-OP_EQUAL = '(~)'
-
-# complex
 NUMBER_LITERAL = '([-]?[1-9]+[0-9]*)'
 VARIABLE_IDENTIFIER = '([A-Za-z_]+[A-Za-z_0-9]*)'
 STRING_LITERAL = '("[^"]*")'
 
-# complex
-
 VALUE = "(?:(?:%s)|(?:%s))" % (NUMBER_LITERAL, VARIABLE_IDENTIFIER)
 
 OP_ARITHMETIC = "([+\-*/%])"
+OP_LOGICAL = "([><~])"
 
 EXPRESSION = "(?:(?:%s$)|(?:(?:%s)\s*(?:%s)\s*(?:%s)))" % (VALUE, VALUE, OP_ARITHMETIC, VALUE)
+CONDITION = "(?:(?:%s)\s*(?:%s)\s*(?:%s))" % (VALUE, OP_LOGICAL, VALUE)
 
-ASSIGNMENT = "(?:(?:%s)\s*%s\s*(?:%s))" % (VARIABLE_IDENTIFIER, OP_ASSIGNMENT, EXPRESSION)
+ASSIGNMENT_STATEMENT = "(?:(?:%s)\s*=\s*(?:%s))" % (VARIABLE_IDENTIFIER, EXPRESSION)
 
-VAR_DECLARE = "(?:%s\s*(?:%s)\s*(?:%s\s*(?:%s))?)" \
-              % (KEYWORD_VAR, VARIABLE_IDENTIFIER, OP_ASSIGNMENT, EXPRESSION)
+VAR_DECLARE_STATEMENT = "(?:%s\s*(?:%s)\s*(?:=\s*(?:%s))?)" % (KEYWORD_VAR, VARIABLE_IDENTIFIER, EXPRESSION)
 
-GREAT_COND = VALUE + '\s*' + OP_GREATER_THAN + '\s*' + VALUE
-LESS_COND = VALUE + '\s*' + OP_LESS_THAN + '\s*' + VALUE
-EQUAL_COND = VALUE + '\s*' + OP_EQUAL + '\s*' + VALUE
+IF_CONDITION = "^(?:%s\s*(?:%s)\s*(?:%s))$" % (KEYWORD_IF, CONDITION, KEYWORD_DO)
+ELIF_CONDITION = "^(?:%s\s*(?:%s)\s*(?:%s))$" % (KEYWORD_ELIF, CONDITION, KEYWORD_DO)
+ELSE_CONDITION = "^(?:%s\s*(?:%s))$" % (KEYWORD_ELSE, KEYWORD_DO)
+END_CONDITION = "^(?:%s)$" % KEYWORD_END
 
-CONDI = "(?:(?:%s)|(?:%s)|(?:%s))" % (GREAT_COND, LESS_COND, EQUAL_COND)
+WHILE_CONDITION = "^(?:%s\s*(?:%s)\s*(?:%s))$" % (KEYWORD_WHILE, CONDITION, KEYWORD_DO)
 
-CON = "(?:%s\s*(?:%s)\s*(?:%s))"
+WRITE_STATEMENT = "(?:%s\s*(?:(?:%s)|(?:%s)))" % (KEYWORD_WRITE, EXPRESSION, STRING_LITERAL)
+READ_STATEMENT = "(?:%s\s*(?:%s))" % (KEYWORD_READ, VARIABLE_IDENTIFIER,)
+COMMENT = "[#].*"
 
-IF_COND = CON % (KEYWORD_IF, CONDI, KEYWORD_DO)
-ELIF_COND = CON % (KEYWORD_ELIF, CONDI, KEYWORD_DO)
-ELSE_COND = "(?:%s\s*(?:%s))" % (KEYWORD_ELSE, KEYWORD_DO)
-END_COND = KEYWORD_END
-
-WHILE_COND = CON % (KEYWORD_WHILE, CONDI, KEYWORD_DO)
-
-WRITE_CMD = "(?:%s\s*(?:(?:%s)|(?:%s)))" % (KEYWORD_WRITE, EXPRESSION, STRING_LITERAL)
-READ_CMD = "(?:%s\s*(?:%s))" % (KEYWORD_READ, VARIABLE_IDENTIFIER,)
-
-g = []
+rules = [
+    ('var', VAR_DECLARE_STATEMENT),
+    ('ass', ASSIGNMENT_STATEMENT),
+    ('if', IF_CONDITION),
+    ('elif', ELIF_CONDITION),
+    ('else', ELSE_CONDITION),
+    ('end', END_CONDITION),
+    ('write', WRITE_STATEMENT),
+    ('read', READ_STATEMENT),
+    ('com', COMMENT),
+]
 
 
 def parse(line):
-    for rule in [VAR_DECLARE, ASSIGNMENT, IF_COND, ELIF_COND, ELSE_COND, END_COND, READ_CMD, WRITE_CMD]:
+    for name, rule in rules:
         mc = re.match(rule, line)
         if mc is not None:
             tokens = filter(None, mc.groups())
-            print line, ' ' * 12, tokens
+            return name, tokens
 
 
 def read():
@@ -73,7 +67,7 @@ def read():
     for line in content.splitlines():
         com.append(parse(line.lstrip().rstrip()))
 
-        # print (com)
-
+    com = filter(None, com)
+    pprint(com)
 
 read()
