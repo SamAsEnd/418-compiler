@@ -1,11 +1,8 @@
 import os
-import pprint
-from pprint import pprint
 
-from generator import generator
-
-from src.parser import parse
-from src.tokenizer import tokenize
+from src.lib.tokenizer import tokenize
+from src.lib.parser import parse
+from src.lib.generator import generator
 
 
 def main():
@@ -19,8 +16,8 @@ def main():
             tokens.append(tokenize(line))
 
     ast = parse(tokens)
-    # exit(0)
     code = generator(ast)
+    print(code);
     open('test.c', 'w').write(code)
     os.system('gcc test.c -o test')
     print('done')
