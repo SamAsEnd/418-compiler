@@ -1,0 +1,25 @@
+# A 418 program to swap two numbers
+# without using third variable
+
+# declare the two variables
+var x
+var y
+
+# prompt for the numbers from keyboard
+write "Enter the first number: "
+read x
+
+write "Enter the second number: "
+read y
+
+# let the magic happen
+x = x + y
+y = x - y
+x = x - y
+
+# abracadabra
+write "First : "
+write x
+
+write "Second : "
+write y

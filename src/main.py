@@ -1,26 +1,36 @@
-import os
+#!/bin/env python3
 
-from src.lib.tokenizer import tokenize
-from src.lib.parser import parse
-from src.lib.generator import generator
+import os
+import sys
+import argparse
+import tempfile
+
+from lib.tokenizer import tokenize
+from lib.parser import parse
+from lib.generator import generator
 
 
 def main():
-    content = open('../sample/sample.418', 'r').read()
+    p = argparse.ArgumentParser(description="Our '418' language compiler/interpreter")
+    p.add_argument('file', help="The .418 program source code")
+    p.add_argument('-o', '--output', help="The output executable of the file")
+    args = p.parse_args()
 
-    tokens = []
+    try:
+        tokens = tokenize(open(args.file, 'r').read())
+        tree = parse(tokens)
+        code = generator(tree)
 
-    for line in content.splitlines():
-        line = line.lstrip().rstrip()
-        if len(line) > 0:
-            tokens.append(tokenize(line))
+        f = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.c')
+        f.write(code)
+        f.close()
 
-    ast = parse(tokens)
-    code = generator(ast)
-    print(code);
-    open('test.c', 'w').write(code)
-    os.system('gcc test.c -o test')
-    print('done')
+        os.system('gcc "%s" -o "%s"' % (f.name, args.output))
+        os.unlink(f.name)
+        exit(0)
+    except SyntaxError as se:
+        sys.stderr.write('Exception: ' + se.msg)
+        exit(1)
 
 
 if __name__ == '__main__':

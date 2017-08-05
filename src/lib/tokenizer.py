@@ -59,11 +59,23 @@ statements = [
 ]
 
 
-def tokenize(line):
+def get_token(line, line_number):
     for name, rule in statements:
         mc = re.match(rule, line)
         if mc is not None:
             return name, [token for token in filter(None, mc.groups())]
 
-    sys.stderr.write('Syntax Error: on line "' + line + '"')
-    exit(1)
+    raise SystemError('on line %d "%s"' % (line_number, line))
+
+
+def tokenize(content):
+    tokens = []
+    line_number = 1
+
+    for line in content.splitlines():
+        line = line.strip()
+        if len(line) > 0:
+            tokens.append(get_token(line, line_number))
+        line_number += 1
+
+    return tokens

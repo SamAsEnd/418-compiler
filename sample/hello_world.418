@@ -1,0 +1,3 @@
+# A 418 program to display hello world
+
+write "Hello world, I'm a teapot"

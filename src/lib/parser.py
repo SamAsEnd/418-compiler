@@ -1,4 +1,4 @@
-from src.lib.nodes import *
+from lib.nodes import *
 
 
 def parse_comment(tokens):

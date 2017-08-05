@@ -1,4 +1,4 @@
-from src.lib.nodes import *
+from lib.nodes import *
 
 
 def generate_c(stmt: Statement):
@@ -19,7 +19,7 @@ def generate_c(stmt: Statement):
         code += str(stmt.variable)
         code += ' );'
     elif isinstance(stmt, WriteExpression):
-        code += 'printf("%d", '
+        code += 'printf("%d\\n", '
         code += str(stmt.variable)
         code += ' );'
     elif isinstance(stmt, WriteString):
