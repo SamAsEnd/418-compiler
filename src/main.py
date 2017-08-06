@@ -7,7 +7,7 @@ import tempfile
 
 from lib.tokenizer import tokenize
 from lib.parser import parse
-from lib.generator import generator
+from lib.gen_asm import generator
 
 
 def main():
@@ -20,13 +20,21 @@ def main():
         tokens = tokenize(open(args.file, 'r').read())
         tree = parse(tokens)
         code = generator(tree)
+        # code = code.replace('PTR', ' ')
+        code = code.replace('ebp', 'rbp')
+        # print(code)
+        # exit(0)
 
-        f = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.c')
+        f = open('temp.s', 'w')  # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.asm')
         f.write(code)
         f.close()
 
-        os.system('gcc "%s" -o "%s"' % (f.name, args.output))
-        os.unlink(f.name)
+        os.system('gcc -c "%s" -o "%s"' % (f.name, args.output + '.o'))
+        # os.system('nasm -f elf %s -o %s' % (f.name, args.output + '.o'))
+
+        os.system('ld %s' % (args.output + '.o'))
+        # os.unlink(f.name)
+        # os.unlink(args.output + '.o')
         exit(0)
     except SyntaxError as se:
         sys.stderr.write('Exception: ' + se.msg)
