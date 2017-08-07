@@ -2,8 +2,8 @@
 
 .section .data
 
-number:
-    .zero 4
+number: .zero 4
+buffer: .zero 15
 
 .text
     .globl main

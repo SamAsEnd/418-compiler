@@ -3,11 +3,11 @@ var x = 15
 var y = 13
 
 write "Enter the first number: "
-# read x
+read x
 
 write "Enter the second number: "
-# read y
+read y
 
 var z = x + y
 
-# write z
+write z

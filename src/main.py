@@ -21,20 +21,21 @@ def main():
         tree = parse(tokens)
         code = generator(tree)
 
-        f = open('t.s', 'w') # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
+        f = open('t.s', 'w')  # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
         f.write(code)
         f.close()
 
-        status = os.system('gcc -c "%s" -o "%s"' % (f.name, args.output + '.o'))
+        exit(0)
+        status = os.system('as –o %s %s' % (args.output + '.o', f.name))
         # os.system('nasm -f elf %s -o %s' % (f.name, args.output + '.o'))
 
         if status != 0:
-            raise Exception('gcc assembler failed with exit code ' + str(status))
+            raise Exception('as assembler failed with exit code ' + str(status))
 
-        status = os.system('gcc %s -o %s' % (args.output + '.o', args.output))
+        status = os.system('ld –o %s %s' % (args.output, args.output + '.o'))
 
         if status != 0:
-            raise Exception('gcc linker failed with exit code ' + str(status))
+            raise Exception('ld linker failed with exit code ' + str(status))
 
         # os.unlink(f.name)
         # os.unlink(args.output + '.o')

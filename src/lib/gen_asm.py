@@ -138,17 +138,24 @@ def generate_asm(stmt: Statement):
                'syscall\n' % (str_label, len(stmt.string.string.strip().strip('"')) + 1)
 
     elif isinstance(stmt, WriteValue):
-        return 'mov edi, buffer\n' \
-               'mov esi, %s\n' \
-               'mov edx, 0\n' \
-               'mov eax, 0\n' \
-               'call int2str\n' \
-               '' \
-               'mov rdx, rax\n' \
-               'mov rax, 1\n' \
-               'mov rdi, 1\n' \
-               'mov rsi, offset buffer\n' \
-               'syscall\n' % val(stmt.variable)
+        return 'mov rdi, offset integer\n' \
+               'mov eax, %s\n' \
+               'mov rsi, 0\n' \
+               'mov esi, eax\n' \
+               'mov rax, 0\n' \
+               'call printf\n' % val(stmt.variable)
+
+        # return 'mov edi, buffer\n' \
+        #        'mov esi, %s\n' \
+        #        'mov edx, 0\n' \
+        #        'mov eax, 0\n' \
+        #        'call int2str\n' \
+        #        '' \
+        #        'mov rdx, rax\n' \
+        #        'mov rax, 1\n' \
+        #        'mov rdi, 1\n' \
+        #        'mov rsi, offset buffer\n' \
+        #        'syscall\n' % val(stmt.variable)
 
     elif isinstance(stmt, Read):
         return 'mov eax, 0\n' \
@@ -175,7 +182,7 @@ def generator(ast):
     for label in strings.keys():
         code += '%s: .string "%s\\n"\n' % (label, strings[label].strip().strip('"'))
 
-    code += 'integer: .string "' + '\0' * 15 + '"\n'
-    code += 'buffer: .string "' + '\0' * 15 + '"\n'
+    code += 'integer: .string "%d"\n'
+    # code += 'buffer: .string "' + '\0' * 15 + '"\n'
 
     return code
