@@ -18,7 +18,7 @@ def generate_c(stmt: Statement):
         code += 'scanf("%d", &'
         code += str(stmt.variable)
         code += ' );'
-    elif isinstance(stmt, WriteExpression):
+    elif isinstance(stmt, WriteValue):
         code += 'printf("%d\\n", '
         code += str(stmt.variable)
         code += ' );'

@@ -98,7 +98,7 @@ def parse_write(tokens):
     if tokens[0].startswith('"'):
         return WriteString(String(tokens[0]))
     else:
-        return WriteExpression(parse_expression(tokens))
+        return WriteValue(parse_expression(tokens))
 
 
 def parse_read(tokens):

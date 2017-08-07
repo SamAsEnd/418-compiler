@@ -65,7 +65,7 @@ def get_token(line, line_number):
         if mc is not None:
             return name, [token for token in filter(None, mc.groups())]
 
-    raise SystemError('on line %d "%s"' % (line_number, line))
+    raise SyntaxError('on line %d "%s"' % (line_number, line))
 
 
 def tokenize(content):

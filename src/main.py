@@ -20,19 +20,22 @@ def main():
         tokens = tokenize(open(args.file, 'r').read())
         tree = parse(tokens)
         code = generator(tree)
-        # code = code.replace('PTR', ' ')
-        code = code.replace('ebp', 'rbp')
-        # print(code)
-        # exit(0)
 
-        f = open('temp.s', 'w')  # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.asm')
+        f = open('t.s', 'w') # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
         f.write(code)
         f.close()
 
-        os.system('gcc -c "%s" -o "%s"' % (f.name, args.output + '.o'))
+        status = os.system('gcc -c "%s" -o "%s"' % (f.name, args.output + '.o'))
         # os.system('nasm -f elf %s -o %s' % (f.name, args.output + '.o'))
 
-        os.system('ld %s' % (args.output + '.o'))
+        if status != 0:
+            raise Exception('gcc assembler failed with exit code ' + str(status))
+
+        status = os.system('gcc %s -o %s' % (args.output + '.o', args.output))
+
+        if status != 0:
+            raise Exception('gcc linker failed with exit code ' + str(status))
+
         # os.unlink(f.name)
         # os.unlink(args.output + '.o')
         exit(0)

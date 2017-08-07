@@ -154,7 +154,7 @@ class Statement:
 
 
 class VarDeclare(Statement):
-    def __init__(self, variable: Variable, expression: Expression):
+    def __init__(self, variable: Variable, expression: Value):
         self.variable = variable
         self.expression = expression
 
@@ -227,8 +227,8 @@ class WriteString(Statement):
         return 'write ' + str(self.string)
 
 
-class WriteExpression(Statement):
-    def __init__(self, variable: Expression):
+class WriteValue(Statement):
+    def __init__(self, variable: Value):
         self.variable = variable
 
     def __str__(self):
