@@ -14,6 +14,8 @@ class Value(Expression):
 
 class Number(Value):
     def __init__(self, number: int):
+        if abs(number) > 2**31:
+            raise Exception(str(number) + ' number is out of range')
         self.number = number
 
     def __str__(self):

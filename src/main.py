@@ -21,24 +21,22 @@ def main():
         tree = parse(tokens)
         code = generator(tree)
 
-        f = open('t.s', 'w')  # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
+        f = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
         f.write(code)
         f.close()
 
-        exit(0)
-        status = os.system('as –o %s %s' % (args.output + '.o', f.name))
-        # os.system('nasm -f elf %s -o %s' % (f.name, args.output + '.o'))
+        status = os.system('as %s -o %s' % (f.name, args.output + '.o'))
 
         if status != 0:
             raise Exception('as assembler failed with exit code ' + str(status))
 
-        status = os.system('ld –o %s %s' % (args.output, args.output + '.o'))
+        status = os.system('ld -o %s %s lib/lib418.o' % (args.output, args.output + '.o'))
 
         if status != 0:
             raise Exception('ld linker failed with exit code ' + str(status))
 
-        # os.unlink(f.name)
-        # os.unlink(args.output + '.o')
+        os.unlink(f.name)
+        os.unlink(args.output + '.o')
         exit(0)
     except SyntaxError as se:
         sys.stderr.write('Exception: ' + se.msg)
