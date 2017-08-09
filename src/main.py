@@ -5,9 +5,9 @@ import sys
 import argparse
 import tempfile
 
-from lib.tokenizer import tokenize
 from lib.parser import parse
-from lib.gen_asm import generator
+from lib.tokenizer import tokenize
+from compilers.assembly import compile_it
 
 
 def main():
@@ -19,13 +19,13 @@ def main():
     try:
         tokens = tokenize(open(args.file, 'r').read())
         tree = parse(tokens)
-        code = generator(tree)
+        code = compile_it(tree)
 
-        f = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
+        f = open(args.output + '.s', 'w') # tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.s')
         f.write(code)
         f.close()
 
-        status = os.system('as %s -o %s' % (f.name, args.output + '.o'))
+        status = os.system('as -g %s -o %s' % (f.name, args.output + '.o'))
 
         if status != 0:
             raise Exception('as assembler failed with exit code ' + str(status))
@@ -35,8 +35,8 @@ def main():
         if status != 0:
             raise Exception('ld linker failed with exit code ' + str(status))
 
-        os.unlink(f.name)
-        os.unlink(args.output + '.o')
+        # os.unlink(f.name)
+        # os.unlink(args.output + '.o')
         exit(0)
     except SyntaxError as se:
         sys.stderr.write('Exception: ' + se.msg)

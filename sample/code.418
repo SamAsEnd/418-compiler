@@ -1,7 +1,0 @@
-
-var x = 15
-var y = 13
-
-var z = x + y
-
-write z

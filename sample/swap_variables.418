@@ -1,5 +1,7 @@
+#####################################
 # A 418 program to swap two numbers
 # without using third variable
+#####################################
 
 # declare the two variables
 var x
@@ -19,7 +21,7 @@ x = x - y
 
 # abracadabra
 write "First : "
-write x
+writeln x
 
 write "Second : "
-write y
+writeln y

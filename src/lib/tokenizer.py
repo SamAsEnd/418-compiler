@@ -18,6 +18,7 @@ KEYWORD_READ = '(?:read)'
 KEYWORD_VAR = '(?:var)'
 KEYWORD_WHILE = '(?:while)'
 KEYWORD_WRITE = '(?:write)'
+KEYWORD_WRITE_LINE = '(?:writeln)'
 
 VALUE = "(?:(?:%s)|(?:%s))" % (LITERAL_NUMBER, VARIABLE)
 
@@ -38,6 +39,7 @@ ELSE_CONDITION = "^(?:%s\s+(?:%s))$" % (KEYWORD_ELSE, KEYWORD_DO)
 END_CONDITION = "^(?:%s)$" % KEYWORD_END
 
 WRITE_STATEMENT = "^(?:%s\s+(?:(?:%s)|(?:%s)))$" % (KEYWORD_WRITE, EXPRESSION, LITERAL_STRING)
+WRITE_LINE_STATEMENT = "^(?:%s\s+(?:(?:%s)|(?:%s)))$" % (KEYWORD_WRITE_LINE, EXPRESSION, LITERAL_STRING)
 READ_STATEMENT = "^(?:%s\s+(?:%s))$" % (KEYWORD_READ, VARIABLE,)
 
 statements = [
@@ -55,6 +57,7 @@ statements = [
     ('end', END_CONDITION),
 
     ('write', WRITE_STATEMENT),
+    ('writeln', WRITE_LINE_STATEMENT),
     ('read', READ_STATEMENT),
 ]
 

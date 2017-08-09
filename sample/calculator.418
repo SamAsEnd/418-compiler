@@ -1,0 +1,33 @@
+#########################
+# A 418 calculator      #
+#########################
+
+var x
+var y
+
+write "Enter x: "
+read x
+
+write "Enter y: "
+read y
+
+var a = x + y
+var b = x - y
+var c = x * y
+var d = x / y
+var e = x % y
+
+write "x + y = "
+writeln a
+
+write "x - y = "
+writeln b
+
+write "x * y = "
+writeln c
+
+write "x / y = "
+writeln d
+
+write "x % y = "
+writeln e

@@ -1,10 +1,18 @@
-import random
-
 from lib.nodes import *
 
 variables = []
 
 strings = {}
+
+
+# python static function hack
+# https://stackoverflow.com/questions/279561/what-is-the-python-equivalent-of-static-variables-inside-a-function
+def get_tail() -> str:
+    get_tail.counter += 1
+    return str(get_tail.counter)
+
+
+get_tail.counter = 0
 
 
 def offset(var: Variable) -> int:
@@ -33,10 +41,10 @@ def val(value: Value) -> str:
         return '%d(%%rbp)' % offset(value)
 
 
-def generate_asm(stmt: Statement):
+def compile_statement(stmt: Statement):
     if isinstance(stmt, VarDeclare):
         variables.append(stmt.variable.name)
-        return generate_asm(Assignment(stmt.variable, stmt.expression))
+        return compile_statement(Assignment(stmt.variable, stmt.expression))
     elif isinstance(stmt, Assignment):
         if isinstance(stmt.expression, Number):
             return """
@@ -101,11 +109,11 @@ def generate_asm(stmt: Statement):
     elif isinstance(stmt, CompoundStatement):
         code = ''
         for stmt in stmt:
-            code += generate_asm(stmt)
+            code += compile_statement(stmt)
         return code
     elif isinstance(stmt, Conditional):
-        end_label = '.label_jmp_end_' + str(random.randint(0, 9999999))
-        else_label = '.label_jmp_else_' + str(random.randint(0, 9999999))
+        end_label = '.label_jmp_end_' + get_tail()
+        else_label = '.label_jmp_else_' + get_tail()
 
         code = """
                 movl    %s, %%eax
@@ -116,17 +124,17 @@ def generate_asm(stmt: Statement):
             val(stmt.condition.second_operand),
             jmp(stmt.condition), else_label)
 
-        code += generate_asm(stmt.true)
+        code += compile_statement(stmt.true)
         code += ('jmp ' + end_label + '\n')
 
         code += else_label + ':\n'
-        code += generate_asm(stmt.false)
+        code += compile_statement(stmt.false)
         code += ('jmp ' + end_label + '\n')
 
         return code + end_label + ':\n'
     elif isinstance(stmt, Loop):
-        end_label = '.label_loop_end_' + str(random.randint(0, 9999999))
-        loop_label = '.label_loop_' + str(random.randint(0, 9999999))
+        end_label = '.label_loop_end_' + get_tail()
+        loop_label = '.label_loop_' + get_tail()
 
         code = loop_label + ':\n'
 
@@ -138,12 +146,12 @@ def generate_asm(stmt: Statement):
             val(stmt.condition.first_operand), val(stmt.condition.second_operand),
             jmp(stmt.condition), end_label)
 
-        code += generate_asm(stmt.true)
+        code += compile_statement(stmt.true)
         code += ('jmp ' + loop_label + '\n')
 
         return code + end_label + ':\n'
     elif isinstance(stmt, WriteString):
-        str_label = '.string_' + str(random.randint(0, 9999999))
+        str_label = 'string_' + get_tail()
 
         strings[str_label] = stmt.string.string + '\n'
 
@@ -165,40 +173,39 @@ def generate_asm(stmt: Statement):
                 mov     %%rax, %%rdx
                 mov     $1, %%rax
                 mov     $1, %%rdi
-                mov     $str, %%rsi
+                mov     $buffer, %%rsi
                 syscall
                """ % val(stmt.variable)
     elif isinstance(stmt, Read):
         return """
                 mov     $0, %%rax
                 mov     $0, %%rdi
-                mov     $str, %%rsi
+                mov     $buffer, %%rsi
                 mov     $12, %%rdx
                 syscall
 
                 call readNumber
 
-                mov     %%rax, %d(%%rbp)
+                mov     %%eax, %d(%%rbp)
                """ % offset(stmt.variable)
     else:
         raise Exception(stmt.__class__)
 
 
-def generator(ast):
+def compile_it(tree):
     code = """
-.section    .bss
+            .section    .text
+            .globl      main
+            .type       main, @function
+            
+            _start:
+            main:
+                movq    %rsp, %rbp
+                :418-main-stack:
+            """
 
-.section     .text
-        .globl  main
-        .type   main, @function
-
-_start:
-main:
-    movq    %rsp, %rbp
-"""
-
-    for stmt in ast:
-        code += generate_asm(stmt) + '\n'
+    for stmt in tree:
+        code += compile_statement(stmt) + '\n'
 
     code += """
                 mov     $60, %rax
@@ -209,4 +216,10 @@ main:
     for label in strings.keys():
         code += '%s: .string %s\n' % (label, strings[label])
 
+    code = code.replace(':418-main-stack:', 'sub $%d, %%rsp' % (((len(variables) - 1) // 4 + 1) * 16))
+
     return code
+
+
+def build(code, args):
+    pass

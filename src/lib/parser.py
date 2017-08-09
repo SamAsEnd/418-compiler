@@ -101,6 +101,18 @@ def parse_write(tokens):
         return WriteValue(parse_expression(tokens))
 
 
+def parse_writeln(tokens):
+    group = CompoundStatement()
+
+    if tokens[0].startswith('"'):
+        group.add(WriteString(String(tokens[0])))
+    else:
+        group.add(WriteValue(parse_expression(tokens)))
+
+    group.add(WriteString(String('"\\n"')))
+    return group
+
+
 def parse_read(tokens):
     return Read(Variable(tokens[0]))
 
@@ -110,6 +122,7 @@ SIMPLE_PARSERS = {
     'var declare': parse_var_declare,
     'assignment': parse_assignment,
     'write': parse_write,
+    'writeln': parse_writeln,
     'read': parse_read,
 }
 
