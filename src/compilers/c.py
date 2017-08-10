@@ -1,7 +1,13 @@
 from lib.nodes import *
 
 
-def compile_statement(stmt: Statement):
+def transpile_statement(stmt: Statement) -> str:
+    """
+    Convert a given statement node to a c code
+    
+    :param stmt: the statement from the abstract syntax tree 
+    :return: str the valid c code
+    """
     if isinstance(stmt, VarDeclare):
         return 'int %s = %s;\n' % (str(stmt.variable), str(stmt.expression))
     elif isinstance(stmt, Assignment):
@@ -19,7 +25,7 @@ def compile_statement(stmt: Statement):
                 while (%s) {
                     %s
                 }
-                """ % (str(stmt.condition).replace('~', '=='), compile_statement(stmt.true))
+                """ % (str(stmt.condition).replace('~', '=='), transpile_statement(stmt.true))
     elif isinstance(stmt, Conditional):
         return """
                 if (%s) {
@@ -28,30 +34,26 @@ def compile_statement(stmt: Statement):
                     %s
                 }
                 """ % (str(stmt.condition).replace('~', '=='),
-                       compile_statement(stmt.true),
-                       compile_statement(stmt.false))
+                       transpile_statement(stmt.true),
+                       transpile_statement(stmt.false))
     elif isinstance(stmt, CompoundStatement):
         code = ''
         for stmt in stmt:
-            code += compile_statement(stmt)
+            code += transpile_statement(stmt)
         return code
     else:
-        raise Exception(stmt.__class__)
+        raise SyntaxError(stmt.__class__ + ' not implemented!')
 
 
-def compile_it(tree):
+def transpile(tree: CompoundStatement) -> str:
     code = """
             #include <stdio.h>
             int main() {  
            """
 
     for stmt in tree:
-        code += compile_statement(stmt)
+        code += transpile_statement(stmt)
 
     code += '\n}\n'
 
     return code
-
-
-def build(code, args):
-    pass

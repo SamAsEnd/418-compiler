@@ -1,8 +1,6 @@
 from abc import ABC
 from collections import Iterable
 
-import sys
-
 
 class Expression(ABC):
     pass
@@ -14,8 +12,8 @@ class Value(Expression):
 
 class Number(Value):
     def __init__(self, number: int):
-        if abs(number) > 2**31:
-            raise Exception(str(number) + ' number is out of range')
+        if abs(number) > 2 ** 31:
+            raise SyntaxError(str(number) + ' number is out of range')
         self.number = number
 
     def __str__(self):
@@ -31,12 +29,11 @@ class String:
 
 
 class Variable(Value):
-    KEYWORDS = 'var if elif else while do end read write'.split()
+    KEYWORDS = 'var if elif else while do end read write writeln'.split()
 
     def __init__(self, name: str):
         if name in self.KEYWORDS:
-            sys.stderr.write('Error: ' + name + ' is a keyword')
-            exit(1)
+            raise SyntaxError('Error: ' + name + ' is a keyword')
         self.name = name
 
     def __str__(self):
@@ -135,7 +132,7 @@ class EqualTo(Condition):
         return str(self.first_operand) + ' ~ ' + str(self.second_operand)
 
 
-class NotEqual(Condition):
+class NotEqualTo(Condition):
     def __init__(self, first_operand: Value, second_operand: Value):
         Condition.__init__(self, first_operand, second_operand)
 
