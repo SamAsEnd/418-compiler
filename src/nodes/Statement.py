@@ -1,0 +1,2 @@
+class Statement:
+    pass
