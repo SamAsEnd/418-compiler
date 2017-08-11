@@ -366,7 +366,7 @@ class AssemblyCompiler(Compiler):
                 raise RuntimeError('as: assembler failed with exit code ' + str(status))
 
             # link the output
-            status = os.system('ld -o %s %s lib/lib418.o' % (args.output, args.output + '.o'))
+            status = os.system('gcc -o %s %s lib/lib418.o' % (args.output, args.output + '.o'))
 
             if status != 0:
                 raise RuntimeError('ld: linker failed with exit code ' + str(status))
