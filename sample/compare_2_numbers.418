@@ -1,0 +1,20 @@
+# compare two numbers
+
+# declare the two variables
+var x
+var y
+
+# prompt for the numbers from keyboard
+write "Enter the first number: "
+read x
+
+write "Enter the second number: "
+read y
+
+if x > y do
+    writeln "the first number is greater"
+elif x < y do
+    writeln "the second number is greater"
+else do
+    writeln "the numbers are equal"
+end

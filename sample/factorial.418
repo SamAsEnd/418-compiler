@@ -1,0 +1,16 @@
+# Factorial
+
+var num
+
+write "Enter a number: "
+read num
+
+var fact = 1
+
+while num > 1 do
+    fact = fact * num
+    num = num - 1
+end
+
+write "The factorial: "
+writeln fact
