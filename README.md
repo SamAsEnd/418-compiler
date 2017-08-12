@@ -131,15 +131,13 @@ python3 src/Main.py sample/factoria.418 -e
 
 ## Tutorial on 418 [↑](#table-of-content)
 
-I hope u have read about 418 from the [Read Me](README.md) so i would not repeat what you already know.
-
 ### Comment [↑](#table-of-content)
 Comments are used to make the programs user
 friendly and easy to understand. The good thing about comments is that they
 are completely ignored by compilers and interpreters. So you can use whatever
 language you want to write your comments.
 
-A line is a commet if it start with the hashtag `#` symbol.
+A line is a comment if it start with the hashtag `#` symbol.
 
 ```c
 ####################
@@ -165,7 +163,7 @@ var yet_another_number
  - all variables can only holds integer
  - all variables will be initialized by `0`.
  - their must be at least one space b/n the var keyword and the identifier
- - the identifier name must be an alpha numeric sequance with an underscore
+ - the identifier name must be an alpha numeric sequence with an underscore
  - the identifier name shouldn't start with a number
  - the identifier name shouldn't be a keyword
 
