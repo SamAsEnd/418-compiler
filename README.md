@@ -47,7 +47,7 @@ The compiler/interpreter has three operating modes.
 In this mode the compiler read a 418 program and compiles it to x64 linux assembly code.
 The compiled assembly code is in AT&T syntax.
 
-![Assembly compiler](docs/asm.png)
+![Assembly compiler](images/asm.png)
 
 > This is not portable but make it efficient small executable since it doesn't link or load libc or another library/runtime beside ours.
 
@@ -70,7 +70,7 @@ cd libs/ && make && cd ..
 ## C Compiler [↑](#table-of-content)
 In this mode the compiler read a 418 program and transpile it to a c source code.
 
-![C compiler](docs/c.png)
+![C compiler](images/c.png)
 
 > This is portable and should be used if we need a windows executable
 
@@ -85,7 +85,7 @@ python3 src/Main.py sample/swap_variables.418 -o swap -c
 ## Interpreter [↑](#table-of-content)
 In this mode the compiler read a 418 program and execute it line by line.
 
-![Interpreter](docs/python.png)
+![Interpreter](images/python.png)
 
 ```bash
 python3 src/Main.py sample/swap_variables.418 -e
