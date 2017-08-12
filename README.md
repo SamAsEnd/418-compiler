@@ -171,14 +171,18 @@ var yet_another_number
 
 ##### 418 Programming Reserved Keywords
 
-
-| ----- | ----- |
-| ----- | ----- |
-| do    | elif  |
-| else  | end   | 
-| if    | read  |
-| var   | while |
-| write | writeln |
+| Keywords |
+| -------- |
+| do       |
+| elif     |
+| else     |
+| end      | 
+| if       |
+| read     |
+| var      |
+| while    |
+| write    |
+| writeln  |
 
 We can also initialize when we declare variable
 
