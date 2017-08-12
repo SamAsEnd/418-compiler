@@ -131,7 +131,7 @@ python3 src/Main.py sample/factoria.418 -e
 
 ## Tutorial on 418 [↑](#table-of-content)
 
-I hope u have read about 418 from the [Read Me](README.md) so i wouldn't reapet what you already know.
+I hope u have read about 418 from the [Read Me](README.md) so i would not repeat what you already know.
 
 ### Comment [↑](#table-of-content)
 Comments are used to make the programs user
@@ -194,7 +194,7 @@ var yet_another_number = first_number
 
 ### Assigning value to a variable [↑](#table-of-content)
 
-You can assign a value (other variable or a number litral) to the variable like this
+You can assign a value (other variable or a number literal) to the variable like this
 
 ```javascript
 first_number = 35
@@ -227,10 +227,10 @@ mod = variable % variable
 ```
 ##### Notice:
  - the / is an integer division. means 5/2 is 2 not 2.5
- - the oprand can be a variable or a number
- - 
+ - the operand can be a variable or a number
+
 ### Reading from the keyboard [↑](#table-of-content)
-To make our program productive we need to intract with the user.
+To make our program productive we need to interact with the user.
 
 You can read from the standard input like this.
 The program will wait for an input.
@@ -256,13 +256,13 @@ writeln "This will add a line feed at the end"
 ```
 Notice:
 
- - We can write a variable, a number litral or string litral.
+ - We can write a variable, a number literal or string literal.
  - We can use `writeln` to add a line feed at the end of the output 
 
 ```c
 # this are equvalent
-write "This two lines are equvalent.\n"
-writeln "This two lines are equvalent."
+write "This two lines are equivalent.\n"
+writeln "This two lines are equivalent."
 ```
 
 ### Decision making [↑](#table-of-content)
@@ -286,14 +286,14 @@ Following is the situation:
     If given marks are less than 95 and more than 30, then
     Student is average
 
-| Condional Operator | Description              | Example               |
-| ------------------ | ------------------------ | --------------------- |
-| > 				 | Greater than 			| 45 > 13 is `true`		|
-| >= 				 | Greater than or equal to | 13 >= 13 is `true`	|
-| <					 | Less than 				| 45 < 13 is `false`	|
-| <= 				 | Less than or equal to 	| 14 <= 13 is `false`	|
-| ~					 | Equal to 				| 13 ~ 13 is `true`		|
-| !					 | Not equal to 			| 13 ! 13 is `false`	|
+| Conditional Operator | Description              | Example               |
+| -------------------- | ------------------------ | --------------------- |
+| > 				   | Greater than 			| 45 > 13 is `true`		|
+| >=     			   | Greater than or equal to | 13 >= 13 is `true`	|
+| <					   | Less than 				| 45 < 13 is `false`	|
+| <= 				   | Less than or equal to 	| 14 <= 13 is `false`	|
+| ~					   | Equal to 				| 13 ~ 13 is `true`		|
+| !					   | Not equal to 			| 13 ! 13 is `false`	|
 
 
 We can program that using 
