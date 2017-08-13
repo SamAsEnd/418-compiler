@@ -41,8 +41,7 @@ def main():
         compiler.compile()
         compiler.build(args)
     except Exception as e:
-        sys.stderr.write(e)
-        exit(1)
+        raise e
 
 
 if __name__ == '__main__':
