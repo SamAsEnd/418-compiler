@@ -1,0 +1,79 @@
+digit excluding zero = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+digit = "0" | digit excluding zero ;
+
+natural number = digit excluding zero, { digit } ;
+
+literal number = "0" | [ "-" ], natural number ;
+
+all characters = ? all visible characters ?;
+
+double quote = '"' ;
+
+literal string = double quote , { all characters - double quote }, double quote ;
+
+alphabetic character = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+                     | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+                     | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+                     | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+                     | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+                     | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+                     | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+                     | "x" | "y" | "z" ;
+
+underscore = "_"
+
+variable name = ( alphabetic character | underscore ), 
+                { alphabetic character | underscore | digit }
+
+arithmetic operators = "+" | "-" | "*" | "/" | "%"
+
+logical operators = ">" | ">=" | "<" | "<=" | "~" | "!" 
+
+value = variable name | literal number
+
+line feed = ? line feed ?
+
+white space = ? white space ? - line feed
+
+expression = value | ( value, [ white space ], arithmetic operators , [ white space ], value )
+
+comment = { white space } , "#" , { any character - line feed}
+
+variable declaration = { white space } , "var" , white space, { white space },
+                        variable name, { white space }, [ "=" , { white space }, expression ]
+
+assignment statement = { white space } , variable name, { white space }, "=" , { white space }, expression
+
+condition = value, [ white space ], logical operators, [ white space ], value
+
+if condition = { white space } , "if" , white space , condition, white space , "do", { white space }
+
+elif condition = { white space } , "elif" , white space , condition, white space , "do", { white space }
+
+while condition = { white space } , "elif" , white space , condition, white space , "do", { white space }
+
+else condition = { white space } , "else" , white space , "end" , { white space }
+
+end = { white space } , "end" , { white space }
+
+write statement = { white space } , "write" , { white space }, ( value | literal number ) , { white space }
+
+write line statement = { white space } , "writeln" , { white space }, ( value | literal number ) , { white space }
+
+read statement = { white space } , "read" , { white space }, value , { white space }
+    
+non conditional statement = comment | variable declaration | assignment statement | 
+             write statement | write line statement | read statement
+
+else statment = else condition, statement, end
+
+elif statement  = elif condition, statement, ( else statement | end)
+
+if statement = if condition, statement, (elif statment | else statment | end )
+
+while statment = while condition, statement, end
+
+statement = non conditional statement | if statement | while statment
+
+program = { statment | while space }
