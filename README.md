@@ -1,4 +1,4 @@
-# *Q[3.02]* **418**: A small procedural language
+# **418**: A small "procedural" language
 
 ## Table of content
  
